@@ -1,0 +1,6 @@
+{
+  "/api/shifts/route": "app/api/shifts/route.js",
+  "/api/employees/route": "app/api/employees/route.js",
+  "/employees/page": "app/employees/page.js",
+  "/page": "app/page.js"
+}
