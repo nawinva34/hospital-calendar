@@ -1,14 +1,12 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 
-// GET /api/employees - Get all employees
 export async function GET() {
     try {
         const employees = await prisma.employee.findMany({
             orderBy: { id: 'asc' }
         })
 
-        // Auto-seed if empty
         if (employees.length === 0) {
             const seedEmployees = [
                 { name: 'Dr. Sarah Johnson', position: 'แพทย์', department: 'ER', email: 'sarah.j@hospital.com' },
@@ -45,7 +43,6 @@ export async function GET() {
     }
 }
 
-// POST /api/employees - Create new employee
 export async function POST(request: Request) {
     try {
         const body = await request.json()

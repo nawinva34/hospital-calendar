@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 
-// GET /api/shifts - Get all shifts with optional filters
 export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url)
@@ -30,7 +29,6 @@ export async function GET(request: Request) {
     }
 }
 
-// POST /api/shifts - Create new shift
 export async function POST(request: Request) {
     try {
         const body = await request.json()

@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 
-// GET /api/employees/[id] - Get single employee
 export async function GET(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
@@ -32,7 +31,6 @@ export async function GET(
     }
 }
 
-// PUT /api/employees/[id] - Update employee
 export async function PUT(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
@@ -65,7 +63,6 @@ export async function PUT(
     }
 }
 
-// DELETE /api/employees/[id] - Delete employee
 export async function DELETE(
     request: Request,
     { params }: { params: Promise<{ id: string }> }

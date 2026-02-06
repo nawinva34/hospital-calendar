@@ -10,6 +10,7 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Kanit', 'sans-serif'],
+                kanit: ['Kanit', 'sans-serif'],
             },
         },
     },

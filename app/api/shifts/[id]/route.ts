@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 
-// GET /api/shifts/[id] - Get single shift
 export async function GET(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
@@ -32,7 +31,6 @@ export async function GET(
     }
 }
 
-// PUT /api/shifts/[id] - Update shift
 export async function PUT(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
@@ -77,7 +75,6 @@ export async function PUT(
     }
 }
 
-// DELETE /api/shifts/[id] - Delete shift
 export async function DELETE(
     request: Request,
     { params }: { params: Promise<{ id: string }> }

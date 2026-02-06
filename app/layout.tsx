@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import "@radix-ui/themes/styles.css";
 import "./globals.css";
+import { Theme } from "@radix-ui/themes";
 import Navbar from "@/components/navbar";
 
 export const metadata: Metadata = {
@@ -25,8 +27,16 @@ export default function RootLayout({
                 />
             </head>
             <body className="antialiased">
-                <Navbar />
-                {children}
+                <Theme
+                    accentColor="blue"
+                    grayColor="slate"
+                    radius="medium"
+                    scaling="100%"
+                    style={{ fontFamily: 'Kanit, sans-serif' }}
+                >
+                    <Navbar />
+                    {children}
+                </Theme>
             </body>
         </html>
     );
