@@ -69,16 +69,14 @@ export async function DELETE(
 ) {
     try {
         const { id } = await params
+        const employeeId = parseInt(id)
 
-        const deletedEmployee = await prisma.employee.delete({
-            where: { id: parseInt(id) }
-        })
+        await prisma.$transaction([
+            prisma.shift.deleteMany({ where: { employeeId } }),
+            prisma.employee.delete({ where: { id: employeeId } }),
+        ])
 
-        return NextResponse.json({
-            success: true,
-            data: deletedEmployee,
-            message: 'Employee deleted successfully'
-        })
+        return NextResponse.json({ success: true, message: 'Employee deleted successfully' })
     } catch (error) {
         console.error('Error deleting employee:', error)
         return NextResponse.json(
