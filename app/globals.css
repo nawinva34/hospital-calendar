@@ -1,93 +1,58 @@
-@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root,
-.radix-themes {
-    --default-font-family: 'Kanit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-family-sans: 'Kanit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+/* ───── Design Tokens ───── */
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --primary-light: #dbeafe;
+  --accent: #6366f1;
+  --bg-page: #f0f4ff;
+  --bg-card: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --border: #e2e8f0;
+  --radius-card: 20px;
+  --radius-btn: 12px;
+  --shadow-card: 0 4px 24px rgba(37, 99, 235, 0.08);
+  --shadow-btn: 0 2px 8px rgba(37, 99, 235, 0.25);
+  --font: 'Kanit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
+
+/* ───── Reset / Base ───── */
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Kanit', sans-serif !important;
+  margin: 0;
+  padding: 0;
+  background: var(--bg-page);
+  font-family: var(--font) !important;
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-span,
-div,
-a,
-label,
-input,
-textarea,
-select {
-    font-family: 'Kanit', sans-serif;
+h1, h2, h3, h4, h5, h6,
+p, span, div, a, label,
+input, textarea, select,
+button, .rt-Button {
+  font-family: var(--font);
 }
 
-.rt-Button {
-    font-family: 'Kanit', sans-serif;
+/* ───── Radix Themes overrides ───── */
+.radix-themes {
+  --default-font-family: var(--font);
+  --font-family-sans: var(--font);
 }
 
-[role="dialog"] .rt-Button,
-.radix-themes .rt-Button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Kanit', sans-serif;
-    font-weight: 500;
-    line-height: 1;
-    cursor: pointer;
-    border: 0;
-    transition: background-color 0.2s, box-shadow 0.2s;
-}
+[role="dialog"] { pointer-events: auto !important; }
 
-[role="dialog"] .rt-Button.rt-r-size-3,
-.radix-themes .rt-Button.rt-r-size-3 {
-    padding: 8px 16px;
-    font-size: 15px;
-    border-radius: 6px;
-    min-height: 36px;
-}
-
-[role="dialog"] .rt-Button.rt-variant-solid,
-.radix-themes .rt-Button.rt-variant-solid {
-    background-color: #3b82f6;
-    color: white;
-}
-
-[role="dialog"] .rt-Button.rt-variant-solid:hover,
-.radix-themes .rt-Button.rt-variant-solid:hover {
-    background-color: #2563eb;
-}
-
-[role="dialog"] .rt-Button.rt-variant-soft,
-.radix-themes .rt-Button.rt-variant-soft {
-    background-color: rgba(0, 0, 0, 0.05);
-    color: rgba(0, 0, 0, 0.7);
-}
-
-[role="dialog"] .rt-Button.rt-variant-soft:hover,
-.radix-themes .rt-Button.rt-variant-soft:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
-[role="dialog"] {
-    pointer-events: auto !important;
-}
-
-.rt-SelectContent,
-[role="listbox"] {
-    z-index: 10000 !important;
-    pointer-events: auto !important;
+.rt-SelectContent, [role="listbox"] {
+  z-index: 10000 !important;
+  pointer-events: auto !important;
+  font-family: var(--font);
 }
 
 [role="dialog"] input,
@@ -95,78 +60,287 @@ select {
 [role="dialog"] textarea,
 [role="dialog"] button,
 [role="dialog"] .rt-SelectTrigger {
-    pointer-events: auto !important;
+  pointer-events: auto !important;
 }
 
-svg {
-    max-width: 100%;
-    max-height: 100%;
+/* ───── Button Reset (Radix) ───── */
+.rt-Button {
+  font-family: var(--font) !important;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
+[role="dialog"] .rt-Button,
+.radix-themes .rt-Button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font);
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  border: 0;
+  transition: background-color 0.2s, box-shadow 0.2s, transform 0.1s;
+  border-radius: var(--radius-btn);
+}
+
+[role="dialog"] .rt-Button.rt-r-size-3,
+.radix-themes .rt-Button.rt-r-size-3 {
+  padding: 10px 20px;
+  font-size: 15px;
+  min-height: 40px;
+}
+
+[role="dialog"] .rt-Button.rt-variant-solid,
+.radix-themes .rt-Button.rt-variant-solid {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+  box-shadow: var(--shadow-btn);
+}
+
+[role="dialog"] .rt-Button.rt-variant-solid:hover,
+.radix-themes .rt-Button.rt-variant-solid:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+}
+
+[role="dialog"] .rt-Button.rt-variant-soft,
+.radix-themes .rt-Button.rt-variant-soft {
+  background-color: var(--primary-light);
+  color: var(--primary);
+}
+
+[role="dialog"] .rt-Button.rt-variant-soft:hover,
+.radix-themes .rt-Button.rt-variant-soft:hover {
+  background-color: #bfdbfe;
+}
+
+/* ───── SVG ───── */
+svg { max-width: 100%; max-height: 100%; }
+
+/* ───── FullCalendar Skin ───── */
 .fc {
-    font-family: 'Kanit', sans-serif !important;
+  font-family: var(--font) !important;
+  --fc-border-color: var(--border);
+  --fc-today-bg-color: rgba(37, 99, 235, 0.06);
+  --fc-event-border-color: transparent;
+  --fc-page-bg-color: transparent;
 }
 
-.fc-event {
-    font-weight: 500;
+.fc-scrollgrid { border-radius: 16px; overflow: hidden; }
+
+.fc-col-header-cell {
+  background: linear-gradient(135deg, #1e40af 0%, #4f46e5 100%);
+  color: white !important;
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  padding: 4px 0 !important;
+  text-align: center !important;
 }
 
-.fc-daygrid-event {
-    border-radius: 6px;
-    padding: 0 4px;
+.fc-col-header-cell a,
+.fc-col-header-cell-cushion {
+  color: white !important;
+  text-decoration: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  width: 100% !important;
+  min-height: unset !important;
+  min-width: unset !important;
+  padding: 0 !important;
 }
 
+.fc-daygrid-day-number {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  padding: 3px 4px !important;
+  min-height: unset !important;
+  min-width: unset !important;
+  line-height: 1;
+}
+
+.fc-day-today .fc-daygrid-day-number {
+  background: var(--primary);
+  color: white !important;
+  border-radius: 50%;
+  width: 24px !important;
+  height: 24px !important;
+  min-height: 24px !important;
+  min-width: 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 3px !important;
+  padding: 0 !important;
+  font-size: 0.72rem !important;
+}
+
+.fc-daygrid-day { transition: background 0.15s; cursor: pointer; }
+.fc-daygrid-day:hover { background: rgba(37, 99, 235, 0.04); }
+
+/* ── FullCalendar event pill overrides ── */
+.fc-event,
+.fc-event-start,
+.fc-event-end,
+.fc-event-past,
+.fc-daygrid-event,
+.fc-daygrid-block-event,
+.fc-h-event {
+  font-family: var(--font) !important;
+  font-weight: 500 !important;
+  font-size: 0.52rem !important;
+  line-height: 1.2 !important;
+  border-radius: 4px !important;
+  border: none !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  transition: opacity 0.12s !important;
+}
+
+.fc-daygrid-event,
+.fc-daygrid-block-event,
+.fc-h-event {
+  padding: 1px 4px !important;
+  margin-bottom: 1px !important;
+  min-height: unset !important;
+  max-height: 16px !important;
+}
+
+.fc-daygrid-block-event .fc-event-main,
+.fc-h-event .fc-event-main {
+  padding: 0 3px !important;
+  font-size: 0.52rem !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+}
+
+.fc-event-past { opacity: 0.65 !important; }
+
+.fc-event:hover,
+.fc-daygrid-event:hover {
+  opacity: 0.85 !important;
+}
+
+/* ───── Toolbar ───── */
+.fc-toolbar.fc-header-toolbar,
+.fc-toolbar.fc-toolbar-ltr {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: nowrap !important;
+  gap: 8px !important;
+  margin-bottom: 12px !important;
+  padding: 0 2px !important;
+}
+
+/* Month / year title */
 .fc-toolbar-title {
-    font-weight: 600;
-    font-size: 1.125rem;
+  font-family: var(--font) !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  color: var(--text-primary) !important;
+  letter-spacing: -0.01em !important;
+  white-space: nowrap !important;
 }
 
-.fc-button {
-    font-family: 'Kanit', sans-serif !important;
-    font-weight: 500;
-}
-
+/* ── All buttons base ── */
+.fc-button,
 .fc .fc-button-primary {
-    background-color: var(--accent-9);
-    border-color: var(--accent-9);
+  font-family: var(--font) !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  border: none !important;
+  outline: none !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+  box-shadow: none !important;
+  min-height: unset !important;
+  min-width: unset !important;
 }
 
-.fc .fc-button-primary:hover {
-    background-color: var(--accent-10);
-    border-color: var(--accent-10);
+/* Prev / Next icon buttons — pill group */
+.fc .fc-prev-button,
+.fc .fc-next-button {
+  background: linear-gradient(135deg, #2563eb, #6366f1) !important;
+  color: white !important;
+  border-radius: 8px !important;
+  padding: 5px 9px !important;
+  box-shadow: 0 2px 6px rgba(37,99,235,0.25) !important;
 }
 
-.fc .fc-button-primary:disabled {
-    background-color: var(--gray-6);
-    border-color: var(--gray-6);
+.fc .fc-prev-button:hover,
+.fc .fc-next-button:hover {
+  background: linear-gradient(135deg, #1d4ed8, #4f46e5) !important;
+  box-shadow: 0 4px 10px rgba(37,99,235,0.35) !important;
+  transform: translateY(-1px) !important;
 }
 
+.fc .fc-prev-button { border-radius: 8px 4px 4px 8px !important; }
+.fc .fc-next-button { border-radius: 4px 8px 8px 4px !important; }
+
+/* Group prev+next with no gap */
+.fc-toolbar-chunk:first-child {
+  display: flex !important;
+  align-items: center !important;
+  gap: 2px !important;
+}
+
+/* Today button — ghost outline style */
+.fc .fc-today-button {
+  background: white !important;
+  color: var(--primary) !important;
+  border: 1.5px solid #bfdbfe !important;
+  border-radius: 8px !important;
+  padding: 4px 12px !important;
+  font-size: 0.75rem !important;
+  box-shadow: none !important;
+}
+
+.fc .fc-today-button:hover {
+  background: var(--primary-light) !important;
+  border-color: var(--primary) !important;
+}
+
+.fc .fc-today-button:disabled {
+  opacity: 0.45 !important;
+  cursor: default !important;
+}
+
+/* Focus ring */
+.fc .fc-button-primary:focus {
+  box-shadow: 0 0 0 2px rgba(37,99,235,0.25) !important;
+}
+
+/* ───── Mobile Responsive ───── */
 @media (max-width: 768px) {
-    .fc-toolbar {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
+  .fc-toolbar.fc-header-toolbar,
+  .fc-toolbar.fc-toolbar-ltr {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 6px !important;
+  }
+  .fc-toolbar-chunk { display: flex; justify-content: center; }
+  .fc-toolbar-title { font-size: 0.9rem !important; }
+  .fc-daygrid-event { font-size: 0.55rem !important; padding: 1px 3px !important; }
+  .fc-col-header-cell { font-size: 0.68rem; }
+  .fc-daygrid-day-number { font-size: 0.7rem; }
+}
 
-    .fc-toolbar-chunk {
-        display: flex;
-        justify-content: center;
-    }
-
-    .fc-toolbar-title {
-        font-size: 1rem;
-    }
-
-    .fc-button {
-        font-size: 0.875rem;
-        padding: 0.375rem 0.75rem;
-    }
+@media (max-width: 480px) {
+  .fc-toolbar-title { font-size: 0.85rem !important; }
+  .fc-event { font-size: 0.5rem !important; border-radius: 3px !important; }
+  .fc .fc-prev-button,
+  .fc .fc-next-button { padding: 4px 8px !important; }
+  .fc .fc-today-button { padding: 4px 10px !important; font-size: 0.7rem !important; }
 }
 
 @media (max-width: 640px) {
-
-    button,
-    a {
-        min-height: 44px;
-        min-width: 44px;
-    }
+  .fc button,
+  .fc a { min-height: unset !important; min-width: unset !important; }
 }
