@@ -22,7 +22,6 @@ export default function Navbar() {
                 }}>
                     <Flex className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" justify="between" align="center" style={{ height: '64px' }}>
                         <Flex align="center" gap="6">
-                            {/* Logo */}
                             <Link href="/" className="flex items-center group" style={{ textDecoration: 'none' }}>
                                 <Flex align="center" gap="2">
                                     <svg className="h-6 w-6" viewBox="0 0 24 24" fill="white">
@@ -34,7 +33,6 @@ export default function Navbar() {
                                 </Flex>
                             </Link>
 
-                            {/* Desktop navigation */}
                             <Flex className="hidden md:flex" gap="1">
                                 <Link href="/" style={{ textDecoration: 'none' }}>
                                     <Button
@@ -61,9 +59,7 @@ export default function Navbar() {
                             </Flex>
                         </Flex>
 
-                        {/* Right side */}
                         <Flex align="center" gap="3">
-                            {/* Mobile menu button */}
                             <Box className="md:hidden">
                                 <IconButton
                                     variant="ghost"
@@ -82,7 +78,6 @@ export default function Navbar() {
                 </nav>
             </Box>
 
-            {/* Mobile menu dialog */}
             <Dialog.Root open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                 <Dialog.Portal>
                     <Dialog.Overlay className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50" />

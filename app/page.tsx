@@ -124,23 +124,21 @@ export default function Home() {
                             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                             </svg>
-                            <Text>ลงทะเบียนเวร</Text>
+                            <Text style={{ fontFamily: 'Kanit, sans-serif' }}>ลงทะเบียนเวร</Text>
                         </Flex>
                     </Button>
                 </Flex>
 
-                <Box className="bg-white rounded-xl shadow-sm border border-gray-200" style={{ padding: '24px', position: 'relative', zIndex: 1 }}>
+                <Box className="bg-white rounded-xl shadow-sm border border-gray-200" style={{ padding: '16px', position: 'relative', zIndex: 1 }}>
                     <FullCalendar
                         plugins={[dayGridPlugin, interactionPlugin]}
                         initialView="dayGridMonth"
                         events={calendarEvents}
                         dateClick={(info) => {
-                            console.log('Date clicked:', info.dateStr)
                             setSelectedDate(info.dateStr)
                             setDayDetailsOpen(true)
                         }}
                         eventClick={(info) => {
-                            console.log('Event clicked:', info.event.start)
                             const dateStr = info.event.startStr.split('T')[0]
                             setSelectedDate(dateStr)
                             setDayDetailsOpen(true)
@@ -148,14 +146,13 @@ export default function Home() {
                         headerToolbar={{
                             left: 'prev,next today',
                             center: 'title',
-                            right: 'dayGridMonth'
+                            right: ''
                         }}
                         height="auto"
                         locale="th"
                     />
                 </Box>
 
-                {/* Shift Legend */}
                 <Card size="2" mt="4">
                     <Heading size="4" mb="3">สีของช่วงเวร</Heading>
                     <Flex wrap="wrap" gap="3">
@@ -175,7 +172,6 @@ export default function Home() {
                 </Card>
             </Box>
 
-            {/* Day Details Dialog */}
             <Dialog.Root open={dayDetailsOpen} onOpenChange={setDayDetailsOpen}>
                 <Dialog.Portal>
                     <Dialog.Overlay style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0, 0, 0, 0.5)', backdropFilter: 'blur(4px)', zIndex: 9998 }} />
@@ -231,7 +227,6 @@ export default function Home() {
                 </Dialog.Portal>
             </Dialog.Root>
 
-            {/* Register Shift Dialog */}
             <Dialog.Root open={registerDialogOpen} onOpenChange={setRegisterDialogOpen}>
                 <Dialog.Portal>
                     <Dialog.Overlay style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0, 0, 0, 0.5)', backdropFilter: 'blur(4px)', zIndex: 9998 }} />
@@ -246,7 +241,7 @@ export default function Home() {
                                     <Text as="label" size="2" weight="medium" mb="2" style={{ display: 'block' }}>
                                         พนักงาน
                                     </Text>
-                                    {/* <Select.Root
+                                    <Select.Root
                                         size="3"
                                         value={formData.employeeId}
                                         onValueChange={(value) => setFormData({ ...formData, employeeId: value })}
@@ -259,13 +254,6 @@ export default function Home() {
                                                     {emp.name} - {emp.position}
                                                 </Select.Item>
                                             ))}
-                                        </Select.Content>
-                                    </Select.Root> */}
-                                    <Select.Root size="2" defaultValue="apple">
-                                        <Select.Trigger />
-                                        <Select.Content>
-                                            <Select.Item value="apple">Apple</Select.Item>
-                                            <Select.Item value="orange">Orange</Select.Item>
                                         </Select.Content>
                                     </Select.Root>
                                 </Box>
@@ -323,19 +311,11 @@ export default function Home() {
                                     />
                                 </Box>
 
-                                <Flex justify="end" gap="3" pt="4" style={{ borderTop: '1px solid var(--gray-5)' }}>
+                                <Flex justify="end" gap="3" pt="4" style={{ paddingTop: '10px' }}>
                                     <Dialog.Close asChild>
                                         <Button size="3" type="button" variant="soft" color="gray">ยกเลิก</Button>
                                     </Dialog.Close>
-                                    <Button size="3" type="submit">บันทึก</Button>
-
-                                    <Select.Root defaultValue="apple">
-                                        <Select.Trigger color="cyan" variant="soft" />
-                                        <Select.Content color="cyan">
-                                            <Select.Item value="apple">Apple</Select.Item>
-                                            <Select.Item value="orange">Orange</Select.Item>
-                                        </Select.Content>
-                                    </Select.Root>
+                                    <Button size="3" type="submit" style={{ marginLeft: '10px', paddingRight: '10px' }}>บันทึก</Button>
                                 </Flex>
                             </Flex>
                         </form>

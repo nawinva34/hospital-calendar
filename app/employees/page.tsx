@@ -160,7 +160,6 @@ export default function EmployeesPage() {
                     </Box>
                 </Card>
 
-                {/* Employee Stats */}
                 {employees.length > 0 && (
                     <Flex gap="4" mt="6" wrap="wrap">
                         <Card size="2" style={{ flex: '1 1 300px' }}>
@@ -236,7 +235,6 @@ export default function EmployeesPage() {
                 )}
             </Box>
 
-            {/* Add Employee Dialog */}
             <Dialog.Root open={dialogOpen} onOpenChange={setDialogOpen}>
                 <Dialog.Portal>
                     <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" />
