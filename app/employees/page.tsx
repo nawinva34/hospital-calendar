@@ -11,26 +11,26 @@ interface Employee {
     email: string
 }
 
-const DEPT_COLORS: Record<string, { bg: string; text: string }> = {
-    ER: { bg: '#fef3c7', text: '#d97706' },
-    ICU: { bg: '#dbeafe', text: '#2563eb' },
-    Surgery: { bg: '#ede9fe', text: '#7c3aed' },
-    OPD: { bg: '#d1fae5', text: '#059669' },
-    Cardiology: { bg: '#fee2e2', text: '#dc2626' },
-    Pediatrics: { bg: '#fce7f3', text: '#db2777' },
-    Orthopedics: { bg: '#ecfdf5', text: '#059669' },
-    default: { bg: '#f1f5f9', text: '#64748b' },
+const DEPT_COLORS: Record<string, string> = {
+    ER: 'bg-amber-100 text-amber-600',
+    ICU: 'bg-blue-100 text-blue-600',
+    Surgery: 'bg-violet-100 text-violet-600',
+    OPD: 'bg-emerald-100 text-emerald-600',
+    Cardiology: 'bg-red-100 text-red-600',
+    Pediatrics: 'bg-pink-100 text-pink-600',
+    Orthopedics: 'bg-emerald-50 text-emerald-600',
+    default: 'bg-slate-100 text-slate-500',
 }
 
 const AVATAR_GRADIENTS = [
-    'linear-gradient(135deg, #2563eb, #6366f1)',
-    'linear-gradient(135deg, #059669, #0891b2)',
-    'linear-gradient(135deg, #d97706, #ef4444)',
-    'linear-gradient(135deg, #7c3aed, #ec4899)',
-    'linear-gradient(135deg, #0891b2, #2563eb)',
+    'from-blue-600 to-indigo-500',
+    'from-emerald-600 to-cyan-600',
+    'from-amber-600 to-red-500',
+    'from-violet-600 to-pink-500',
+    'from-cyan-600 to-blue-600',
 ]
 
-const getDeptColor = (dept: string) => DEPT_COLORS[dept] ?? DEPT_COLORS.default
+const getDeptColorClass = (dept: string) => DEPT_COLORS[dept] ?? DEPT_COLORS.default
 
 export default function EmployeesPage() {
     const [employees, setEmployees] = useState<Employee[]>([])
@@ -82,31 +82,22 @@ export default function EmployeesPage() {
         e.department.toLowerCase().includes(search.toLowerCase())
     )
 
-    const font = 'Kanit, sans-serif'
-
     return (
-        <div style={{ minHeight: '100vh', background: 'var(--bg-page)', fontFamily: font }}>
-            <div style={{ maxWidth: '900px', margin: '0 auto', padding: '20px 16px 80px' }}>
+        <div className="min-h-screen bg-slate-50 font-kanit">
+            <div className="max-w-4xl mx-auto px-4 py-5 pb-20">
 
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
+                <div className="flex items-center justify-between flex-wrap gap-3 mb-5">
                     <div>
-                        <h1 style={{ margin: 0, fontSize: 'clamp(1.3rem, 5vw, 1.8rem)', fontWeight: 700, color: '#0f172a', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
+                        <h1 className="m-0 text-[clamp(1.3rem,5vw,1.8rem)] font-bold text-slate-900 tracking-tight leading-tight">
                             จัดการพนักงาน
                         </h1>
-                        <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: '#94a3b8' }}>
+                        <p className="mt-1 text-sm text-slate-400">
                             {employees.length} คนในระบบ
                         </p>
                     </div>
                     <button
                         onClick={() => setDialogOpen(true)}
-                        style={{
-                            display: 'inline-flex', alignItems: 'center', gap: '8px',
-                            padding: '10px 18px',
-                            background: 'linear-gradient(135deg, #2563eb, #6366f1)',
-                            color: 'white', border: 'none', borderRadius: '12px',
-                            cursor: 'pointer', fontSize: '0.9rem', fontWeight: 600, fontFamily: font,
-                            boxShadow: '0 3px 12px rgba(37,99,235,0.3)',
-                        }}
+                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-br from-blue-600 to-indigo-500 text-white border-none rounded-xl cursor-pointer text-sm font-semibold shadow-[0_3px_12px_rgba(37,99,235,0.3)] hover:opacity-90 transition-opacity"
                     >
                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
@@ -116,26 +107,22 @@ export default function EmployeesPage() {
                 </div>
 
                 {employees.length > 0 && (
-                    <div style={{ display: 'flex', gap: '10px', marginBottom: '16px', overflowX: 'auto', paddingBottom: '4px' }}>
+                    <div className="flex gap-2.5 mb-4 overflow-x-auto pb-1">
                         {[
-                            { label: 'ทั้งหมด', value: employees.length, color: '#2563eb', bg: '#eff6ff' },
-                            { label: 'แผนก', value: new Set(employees.map(e => e.department)).size, color: '#059669', bg: '#f0fdf4' },
-                            { label: 'ตำแหน่ง', value: new Set(employees.map(e => e.position)).size, color: '#7c3aed', bg: '#f5f3ff' },
+                            { label: 'ทั้งหมด', value: employees.length, color: 'text-blue-600', bg: 'bg-blue-50' },
+                            { label: 'แผนก', value: new Set(employees.map(e => e.department)).size, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                            { label: 'ตำแหน่ง', value: new Set(employees.map(e => e.position)).size, color: 'text-violet-600', bg: 'bg-violet-50' },
                         ].map(s => (
-                            <div key={s.label} style={{
-                                display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0,
-                                background: 'white', borderRadius: '12px', padding: '8px 14px',
-                                border: '1px solid #e8edf5', boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
-                            }}>
-                                <span style={{ fontSize: '1.05rem', fontWeight: 700, color: s.color }}>{s.value}</span>
-                                <span style={{ fontSize: '0.78rem', color: '#64748b' }}>{s.label}</span>
+                            <div key={s.label} className={`flex items-center gap-2 flex-shrink-0 bg-white rounded-xl px-3.5 py-2 border border-slate-100 shadow-sm`}>
+                                <span className={`text-[1.05rem] font-bold ${s.color}`}>{s.value}</span>
+                                <span className="text-[0.78rem] text-slate-500">{s.label}</span>
                             </div>
                         ))}
                     </div>
                 )}
 
-                <div style={{ position: 'relative', marginBottom: '14px' }}>
-                    <svg style={{ position: 'absolute', left: '13px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
+                <div className="relative mb-3.5">
+                    <svg className="absolute left-[13px] top-1/2 -translate-y-1/2 pointer-events-none"
                         width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#94a3b8">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
@@ -144,99 +131,72 @@ export default function EmployeesPage() {
                         placeholder="ค้นหาชื่อ, ตำแหน่ง หรือแผนก..."
                         value={search}
                         onChange={e => setSearch(e.target.value)}
-                        style={{
-                            width: '100%', padding: '10px 14px 10px 38px', borderRadius: '12px',
-                            border: '1.5px solid #e2e8f0', fontSize: '0.88rem', fontFamily: font,
-                            background: 'white', outline: 'none', boxSizing: 'border-box', color: '#0f172a',
-                        }}
+                        className="w-full py-2.5 pr-3.5 pl-10 rounded-xl border-[1.5px] border-slate-200 text-sm bg-white outline-none text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-colors"
                     />
                 </div>
 
                 {filtered.length === 0 ? (
-                    <div style={{
-                        background: 'white', borderRadius: '18px', padding: '48px 24px',
-                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px',
-                        border: '1px solid #e8edf5',
-                    }}>
-                        <div style={{
-                            width: '56px', height: '56px', borderRadius: '16px', background: '#f1f5f9',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        }}>
+                    <div className="bg-white rounded-2xl py-12 px-6 flex flex-col items-center gap-3 border border-slate-100">
+                        <div className="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center">
                             <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#94a3b8">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                                     d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
                         </div>
-                        <p style={{ margin: 0, color: '#94a3b8', fontSize: '0.9rem' }}>
+                        <p className="m-0 text-slate-400 text-sm">
                             {search ? 'ไม่พบพนักงานที่ค้นหา' : 'ยังไม่มีพนักงานในระบบ'}
                         </p>
                         {!search && (
                             <button
                                 onClick={() => setDialogOpen(true)}
-                                style={{
-                                    padding: '8px 20px', background: 'linear-gradient(135deg, #2563eb, #6366f1)',
-                                    color: 'white', border: 'none', borderRadius: '10px',
-                                    cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600, fontFamily: font,
-                                }}
+                                className="px-5 py-2 bg-gradient-to-br from-blue-600 to-indigo-500 text-white border-none rounded-xl cursor-pointer text-sm font-semibold hover:opacity-90 transition-opacity"
                             >
                                 เพิ่มพนักงานคนแรก
                             </button>
                         )}
                     </div>
                 ) : (
-                    <div className="emp-list">
-                        <div className="emp-desktop-header">
+                    <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
+                        <div className="hidden sm:grid grid-cols-[1fr_130px_1fr_80px] gap-2 px-4 py-2.5 bg-slate-50 border-b border-slate-100">
                             {['ชื่อ – ตำแหน่ง', 'แผนก', 'อีเมล', ''].map((h, i) => (
-                                <span key={i} style={{
-                                    fontSize: '0.7rem', fontWeight: 600, color: '#94a3b8',
-                                    letterSpacing: '0.05em', textTransform: 'uppercase',
-                                    textAlign: i === 3 ? 'right' : 'left',
-                                }}>{h}</span>
+                                <span key={i} className={`text-[0.7rem] font-semibold text-slate-400 tracking-wider uppercase ${i === 3 ? 'text-right' : 'text-left'}`}>
+                                    {h}
+                                </span>
                             ))}
                         </div>
 
                         {filtered.map((emp, idx) => {
-                            const dept = getDeptColor(emp.department)
-                            const grad = AVATAR_GRADIENTS[idx % AVATAR_GRADIENTS.length]
+                            const deptClass = getDeptColorClass(emp.department)
+                            const gradClass = AVATAR_GRADIENTS[idx % AVATAR_GRADIENTS.length]
                             return (
-                                <div key={emp.id} className="emp-card">
-                                    <div className="emp-avatar" style={{ background: grad }}>
+                                <div key={emp.id} className="grid grid-cols-[44px_1fr_auto] grid-rows-[auto_auto] sm:grid-cols-[40px_1fr_130px_1fr_80px] sm:grid-rows-1 gap-x-3 gap-y-1 sm:gap-3 p-3.5 sm:p-4 items-center border-b border-slate-50 last:border-none hover:bg-slate-50 transition-colors">
+                                    <div className={`col-start-1 row-span-2 sm:row-span-1 w-11 h-11 sm:w-9 sm:h-9 rounded-xl flex shrink-0 items-center justify-center text-white font-bold text-base sm:text-sm bg-gradient-to-br ${gradClass}`}>
                                         {emp.name.charAt(0).toUpperCase()}
                                     </div>
 
-                                    <div className="emp-info">
-                                        <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#0f172a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                    <div className="col-start-2 row-start-1 sm:col-auto sm:row-auto min-w-0">
+                                        <div className="text-sm font-semibold text-slate-900 truncate">
                                             {emp.name}
                                         </div>
-                                        <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '1px' }}>
+                                        <div className="text-xs text-slate-500 mt-[1px]">
                                             {emp.position}
                                         </div>
                                     </div>
 
-                                    <div className="emp-dept">
-                                        <span style={{
-                                            display: 'inline-block', padding: '3px 10px', borderRadius: '20px',
-                                            background: dept.bg, color: dept.text,
-                                            fontSize: '0.7rem', fontWeight: 600, whiteSpace: 'nowrap',
-                                        }}>
+                                    <div className="col-start-2 row-start-2 flex items-center gap-1.5 sm:col-auto sm:row-auto">
+                                        <span className={`inline-block px-2.5 py-0.5 rounded-full text-[0.7rem] font-semibold whitespace-nowrap ${deptClass}`}>
                                             {emp.department}
                                         </span>
                                     </div>
 
-                                    <div className="emp-email" style={{ fontSize: '0.75rem', color: '#94a3b8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                    <div className="hidden sm:block text-xs text-slate-400 truncate">
                                         {emp.email}
                                     </div>
 
-                                    <div className="emp-actions">
+                                    <div className="col-start-3 row-span-2 self-center flex justify-end sm:col-auto sm:row-auto sm:self-auto">
                                         <button
                                             onClick={() => setDeleteTarget(emp)}
-                                            style={{
-                                                display: 'inline-flex', alignItems: 'center', gap: '4px',
-                                                padding: '5px 12px', background: '#fef2f2', color: '#ef4444',
-                                                border: '1px solid #fecaca', borderRadius: '8px', cursor: 'pointer',
-                                                fontSize: '0.75rem', fontWeight: 600, fontFamily: font,
-                                                minHeight: 'unset',
-                                            }}
+                                            className="inline-flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-500 border border-red-200 rounded-lg cursor-pointer text-xs font-semibold hover:bg-red-100 transition-colors min-h-[unset]"
                                         >
                                             <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -254,35 +214,21 @@ export default function EmployeesPage() {
 
             <Dialog.Root open={dialogOpen} onOpenChange={setDialogOpen}>
                 <Dialog.Portal>
-                    <Dialog.Overlay style={{
-                        position: 'fixed', inset: 0,
-                        background: 'rgba(15,23,42,0.5)',
-                        backdropFilter: 'blur(6px)',
-                        zIndex: 9998,
-                    }} />
-                    <Dialog.Content style={{
-                        position: 'fixed', top: '50%', left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        background: 'white', borderRadius: '22px',
-                        padding: '28px 24px',
-                        width: 'calc(100% - 32px)', maxWidth: '420px',
-                        zIndex: 9999,
-                        boxShadow: '0 24px 60px rgba(15,23,42,0.18)',
-                        maxHeight: '90vh', overflowY: 'auto',
-                    }}>
+                    <Dialog.Overlay className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[9998] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+                    <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-[22px] p-6 sm:p-7 w-[calc(100%-32px)] max-w-[420px] z-[9999] shadow-2xl max-h-[90vh] overflow-y-auto data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] duration-200">
                         <Dialog.Title asChild>
-                            <div style={{ marginBottom: '20px' }}>
-                                <p style={{ margin: '0 0 2px', fontSize: '0.7rem', fontWeight: 600, color: '#94a3b8', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+                            <div className="mb-5">
+                                <p className="m-0 mb-0.5 text-[0.7rem] font-semibold text-slate-400 tracking-wider uppercase">
                                     เพิ่มข้อมูล
                                 </p>
-                                <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: '#0f172a' }}>
+                                <h2 className="m-0 text-xl font-bold text-slate-900">
                                     เพิ่มพนักงาน
                                 </h2>
                             </div>
                         </Dialog.Title>
 
                         <form onSubmit={handleSubmit}>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                            <div className="flex flex-col gap-3.5">
                                 {[
                                     { key: 'name', label: 'ชื่อ', placeholder: 'กรอกชื่อพนักงาน', type: 'text' },
                                     { key: 'position', label: 'ตำแหน่ง', placeholder: 'เช่น แพทย์, พยาบาล', type: 'text' },
@@ -290,7 +236,7 @@ export default function EmployeesPage() {
                                     { key: 'email', label: 'อีเมล', placeholder: 'example@hospital.com', type: 'email' },
                                 ].map(f => (
                                     <div key={f.key}>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#64748b', marginBottom: '5px', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                                        <label className="block text-xs font-semibold text-slate-500 mb-1.5 tracking-wider uppercase">
                                             {f.label}
                                         </label>
                                         <input
@@ -299,42 +245,21 @@ export default function EmployeesPage() {
                                             value={formData[f.key as keyof typeof formData]}
                                             onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
                                             required
-                                            style={{
-                                                width: '100%', padding: '10px 13px', borderRadius: '10px',
-                                                border: '1.5px solid #e2e8f0', fontSize: '0.9rem', fontFamily: font,
-                                                color: '#0f172a', background: '#f8fafc', outline: 'none', boxSizing: 'border-box',
-                                            }}
+                                            className="w-full px-3.5 py-2.5 rounded-xl border-[1.5px] border-slate-200 text-sm text-slate-900 bg-slate-50 outline-none focus:bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-colors"
                                         />
                                     </div>
                                 ))}
                             </div>
 
-                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', paddingTop: '18px', marginTop: '18px', borderTop: '1px solid #f1f5f9' }}>
+                            <div className="flex justify-end gap-2 pt-4 mt-4 border-t border-slate-100">
                                 <Dialog.Close asChild>
-                                    <button type="button" style={{
-                                        padding: '9px 18px', background: '#f1f5f9', color: '#64748b',
-                                        border: 'none', borderRadius: '11px', cursor: 'pointer',
-                                        fontSize: '0.88rem', fontWeight: 500, fontFamily: font,
-                                    }}>
+                                    <button type="button" className="px-4 py-2 bg-slate-100 text-slate-500 rounded-xl text-sm font-medium hover:bg-slate-200 transition-colors">
                                         ยกเลิก
                                     </button>
                                 </Dialog.Close>
-                                <button type="submit" disabled={saving} style={{
-                                    display: 'inline-flex', alignItems: 'center', gap: '7px',
-                                    padding: '9px 20px',
-                                    background: saving ? '#93c5fd' : 'linear-gradient(135deg, #2563eb, #6366f1)',
-                                    color: 'white', border: 'none', borderRadius: '11px',
-                                    cursor: saving ? 'not-allowed' : 'pointer',
-                                    fontSize: '0.88rem', fontWeight: 600, fontFamily: font,
-                                    boxShadow: '0 3px 10px rgba(37,99,235,0.25)',
-                                }}>
+                                <button type="submit" disabled={saving} className={`inline-flex items-center gap-2 px-5 py-2 text-white rounded-xl text-sm font-semibold shadow-md ${saving ? 'bg-blue-300 cursor-not-allowed' : 'bg-gradient-to-br from-blue-600 to-indigo-500 hover:opacity-90 cursor-pointer'} transition-all`}>
                                     {saving && (
-                                        <span style={{
-                                            width: '12px', height: '12px', borderRadius: '50%',
-                                            border: '2px solid rgba(255,255,255,0.4)',
-                                            borderTopColor: 'white',
-                                            animation: 'spin 0.6s linear infinite', display: 'inline-block',
-                                        }} />
+                                        <span className="w-3 h-3 rounded-full border-2 border-white/40 border-t-white animate-spin inline-block" />
                                     )}
                                     {saving ? 'กำลังบันทึก...' : 'บันทึก'}
                                 </button>
@@ -346,26 +271,10 @@ export default function EmployeesPage() {
 
             <Dialog.Root open={!!deleteTarget} onOpenChange={open => { if (!open) setDeleteTarget(null) }}>
                 <Dialog.Portal>
-                    <Dialog.Overlay style={{
-                        position: 'fixed', inset: 0,
-                        background: 'rgba(15,23,42,0.5)',
-                        backdropFilter: 'blur(6px)',
-                        zIndex: 9998,
-                    }} />
-                    <Dialog.Content style={{
-                        position: 'fixed', top: '50%', left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        background: 'white', borderRadius: '22px',
-                        padding: '28px 24px',
-                        width: 'calc(100% - 32px)', maxWidth: '380px',
-                        zIndex: 9999,
-                        boxShadow: '0 24px 60px rgba(15,23,42,0.18)',
-                    }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '12px' }}>
-                            <div style={{
-                                width: '52px', height: '52px', borderRadius: '16px',
-                                background: '#fef2f2', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            }}>
+                    <Dialog.Overlay className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[9998] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+                    <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-[22px] p-6 sm:p-7 w-[calc(100%-32px)] max-w-[380px] z-[9999] shadow-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] duration-200">
+                        <div className="flex flex-col items-center text-center gap-3">
+                            <div className="w-12 h-12 rounded-2xl bg-red-50 flex items-center justify-center">
                                 <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#ef4444">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -373,46 +282,31 @@ export default function EmployeesPage() {
                             </div>
                             <div>
                                 <Dialog.Title asChild>
-                                    <h3 style={{ margin: '0 0 6px', fontSize: '1.05rem', fontWeight: 700, color: '#0f172a', fontFamily: font }}>
+                                    <h3 className="m-0 mb-1.5 text-base font-bold text-slate-900">
                                         ลบพนักงาน
                                     </h3>
                                 </Dialog.Title>
-                                <p style={{ margin: 0, fontSize: '0.85rem', color: '#64748b', fontFamily: font, lineHeight: 1.5 }}>
-                                    คุณต้องการลบ <strong style={{ color: '#0f172a' }}>{deleteTarget?.name}</strong> ออกจากระบบ?
-                                    <br />การกระทำนี้ไม่สามารถย้อนกลับได้
-                                </p>
+                                <Dialog.Description asChild>
+                                    <p className="m-0 text-sm text-slate-500 leading-relaxed">
+                                        คุณต้องการลบ <strong className="text-slate-900">{deleteTarget?.name}</strong> ออกจากระบบ?
+                                        <br />การกระทำนี้ไม่สามารถย้อนกลับได้
+                                    </p>
+                                </Dialog.Description>
                             </div>
                         </div>
-                        <div style={{ display: 'flex', gap: '8px', marginTop: '24px' }}>
+                        <div className="flex gap-2 mt-6">
                             <Dialog.Close asChild>
-                                <button style={{
-                                    flex: 1, padding: '10px', background: '#f1f5f9', color: '#64748b',
-                                    border: 'none', borderRadius: '11px', cursor: 'pointer',
-                                    fontSize: '0.9rem', fontWeight: 500, fontFamily: font,
-                                }}>
+                                <button className="flex-1 py-2.5 bg-slate-100 text-slate-500 rounded-xl text-sm font-medium hover:bg-slate-200 transition-colors">
                                     ยกเลิก
                                 </button>
                             </Dialog.Close>
                             <button
                                 onClick={handleDelete}
                                 disabled={deleting}
-                                style={{
-                                    flex: 1, padding: '10px',
-                                    background: deleting ? '#fca5a5' : 'linear-gradient(135deg, #ef4444, #dc2626)',
-                                    color: 'white', border: 'none', borderRadius: '11px',
-                                    cursor: deleting ? 'not-allowed' : 'pointer',
-                                    fontSize: '0.9rem', fontWeight: 600, fontFamily: font,
-                                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '7px',
-                                    boxShadow: '0 3px 10px rgba(239,68,68,0.3)',
-                                }}
+                                className={`flex-1 py-2.5 text-white rounded-xl text-sm font-semibold inline-flex items-center justify-center gap-2 shadow-md ${deleting ? 'bg-red-300 cursor-not-allowed' : 'bg-gradient-to-br from-red-500 to-red-600 hover:opacity-90 cursor-pointer'} transition-all`}
                             >
                                 {deleting && (
-                                    <span style={{
-                                        width: '12px', height: '12px', borderRadius: '50%',
-                                        border: '2px solid rgba(255,255,255,0.4)',
-                                        borderTopColor: 'white',
-                                        animation: 'spin 0.6s linear infinite', display: 'inline-block',
-                                    }} />
+                                    <span className="w-3 h-3 rounded-full border-2 border-white/40 border-t-white animate-spin inline-block" />
                                 )}
                                 {deleting ? 'กำลังลบ...' : 'ลบพนักงาน'}
                             </button>
@@ -420,81 +314,6 @@ export default function EmployeesPage() {
                     </Dialog.Content>
                 </Dialog.Portal>
             </Dialog.Root>
-
-            <style>{`
-                @keyframes spin { to { transform: rotate(360deg); } }
-                input:focus { border-color: #2563eb !important; background: white !important; }
-
-                .emp-list {
-                    background: white;
-                    border-radius: 18px;
-                    border: 1px solid #e8edf5;
-                    overflow: hidden;
-                }
-
-                .emp-desktop-header {
-                    display: grid;
-                    grid-template-columns: 1fr 130px 1fr 80px;
-                    gap: 8px;
-                    padding: 10px 16px;
-                    background: #f8fafc;
-                    border-bottom: 1px solid #e8edf5;
-                }
-
-                .emp-card {
-                    display: grid;
-                    grid-template-columns: 40px 1fr 130px 1fr 80px;
-                    gap: 12px;
-                    padding: 14px 16px;
-                    align-items: center;
-                    border-bottom: 1px solid #f1f5f9;
-                    transition: background 0.12s;
-                }
-
-                .emp-card:last-child { border-bottom: none; }
-                .emp-card:hover { background: #fafbff; }
-
-                .emp-avatar {
-                    width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
-                    display: flex; align-items: center; justify-content: center;
-                    color: white; font-weight: 700; font-size: 0.88rem; font-family: Kanit, sans-serif;
-                }
-
-                .emp-actions { display: flex; justify-content: flex-end; }
-
-                @media (max-width: 640px) {
-                    .emp-desktop-header { display: none; }
-
-                    .emp-card {
-                        grid-template-columns: 44px 1fr auto;
-                        grid-template-rows: auto auto;
-                        gap: 4px 12px;
-                        padding: 14px;
-                    }
-
-                    .emp-avatar {
-                        width: 44px; height: 44px; border-radius: 13px;
-                        font-size: 1rem;
-                        grid-row: 1 / 3;
-                    }
-
-                    .emp-info { grid-column: 2; grid-row: 1; }
-
-                    .emp-dept {
-                        grid-column: 2; grid-row: 2;
-                        display: flex; align-items: center; gap: 6px;
-                    }
-
-                    .emp-email {
-                        display: none;
-                    }
-
-                    .emp-actions {
-                        grid-column: 3; grid-row: 1 / 3;
-                        align-self: center;
-                    }
-                }
-            `}</style>
         </div>
     )
 }
