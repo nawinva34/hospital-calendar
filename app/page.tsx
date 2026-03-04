@@ -23,12 +23,12 @@ interface Employee {
     email: string
 }
 
-const SHIFT_COLORS: Record<string, { bg: string; label: string; text: string }> = {
-    '08-16': { bg: '#10b981', label: '08:00 – 16:00', text: 'เช้า' },
-    '08-20': { bg: '#3b82f6', label: '08:00 – 20:00', text: 'กลางวัน' },
-    '08-24': { bg: '#f59e0b', label: '08:00 – 24:00', text: 'ยาว' },
-    '16-24': { bg: '#8b5cf6', label: '16:00 – 24:00', text: 'บ่าย' },
-    '24-08': { bg: '#ef4444', label: '24:00 – 08:00', text: 'ดึก' },
+const SHIFT_COLORS: Record<string, { bg: string; label: string; text: string; bgClass: string; textClass: string }> = {
+    '08-16': { bg: '#10b981', label: '08:00 – 16:00', text: 'เช้า', bgClass: 'bg-emerald-500', textClass: 'text-emerald-500' },
+    '08-20': { bg: '#3b82f6', label: '08:00 – 20:00', text: 'กลางวัน', bgClass: 'bg-blue-500', textClass: 'text-blue-500' },
+    '08-24': { bg: '#f59e0b', label: '08:00 – 24:00', text: 'ยาว', bgClass: 'bg-amber-500', textClass: 'text-amber-500' },
+    '16-24': { bg: '#8b5cf6', label: '16:00 – 24:00', text: 'บ่าย', bgClass: 'bg-violet-500', textClass: 'text-violet-500' },
+    '24-08': { bg: '#ef4444', label: '24:00 – 08:00', text: 'ดึก', bgClass: 'bg-red-500', textClass: 'text-red-500' },
 }
 
 export default function Home() {
@@ -85,6 +85,7 @@ export default function Home() {
     }
 
     const getShiftColor = (shiftTime: string) => SHIFT_COLORS[shiftTime]?.bg ?? '#6b7280'
+    const getShiftStyle = (shiftTime: string) => SHIFT_COLORS[shiftTime] ?? { bgClass: 'bg-slate-500', textClass: 'text-slate-500' }
 
     const calendarEvents = shifts.map(shift => ({
         id: shift.id.toString(),
@@ -96,120 +97,22 @@ export default function Home() {
     }))
 
     const shiftsOnSelectedDate = selectedDate ? shifts.filter(s => s.date === selectedDate) : []
-    const cardStyle = (extra?: React.CSSProperties): React.CSSProperties => ({
-        background: '#ffffff',
-        borderRadius: '20px',
-        padding: '20px',
-        boxShadow: '0 4px 24px rgba(37,99,235,0.07)',
-        border: '1px solid #e8edf5',
-        ...extra,
-    })
-
-    const inputStyle: React.CSSProperties = {
-        width: '100%',
-        padding: '10px 14px',
-        borderRadius: '10px',
-        border: '1.5px solid #e2e8f0',
-        fontSize: '0.95rem',
-        fontFamily: 'Kanit, sans-serif',
-        color: '#0f172a',
-        background: '#f8fafc',
-        outline: 'none',
-        transition: 'border-color 0.2s',
-        boxSizing: 'border-box',
-    }
-
-    const labelStyle: React.CSSProperties = {
-        display: 'block',
-        fontSize: '0.82rem',
-        fontWeight: 600,
-        color: '#64748b',
-        marginBottom: '6px',
-        letterSpacing: '0.03em',
-        textTransform: 'uppercase',
-        fontFamily: 'Kanit, sans-serif',
-    }
-
-    const primaryBtnStyle: React.CSSProperties = {
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '8px',
-        padding: '11px 22px',
-        background: 'linear-gradient(135deg, #2563eb, #6366f1)',
-        color: 'white',
-        border: 'none',
-        borderRadius: '12px',
-        cursor: 'pointer',
-        fontSize: '0.95rem',
-        fontWeight: 600,
-        fontFamily: 'Kanit, sans-serif',
-        boxShadow: '0 3px 12px rgba(37,99,235,0.3)',
-        transition: 'all 0.2s',
-        minHeight: '44px',
-    }
-
-    const ghostBtnStyle: React.CSSProperties = {
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '10px 20px',
-        background: '#f1f5f9',
-        color: '#64748b',
-        border: 'none',
-        borderRadius: '12px',
-        cursor: 'pointer',
-        fontSize: '0.95rem',
-        fontWeight: 500,
-        fontFamily: 'Kanit, sans-serif',
-        transition: 'all 0.2s',
-        minHeight: '44px',
-    }
-
-    const dialogOverlayStyle: React.CSSProperties = {
-        position: 'fixed', inset: 0,
-        background: 'rgba(15,23,42,0.55)',
-        backdropFilter: 'blur(6px)',
-        zIndex: 9998,
-    }
-
-    const dialogContentStyle: React.CSSProperties = {
-        position: 'fixed', top: '50%', left: '50%',
-        transform: 'translate(-50%, -50%)',
-        background: 'white',
-        borderRadius: '22px',
-        padding: '28px 24px',
-        width: 'calc(100% - 32px)',
-        maxWidth: '440px',
-        zIndex: 9999,
-        boxShadow: '0 30px 80px rgba(15,23,42,0.2)',
-        maxHeight: '90vh',
-        overflowY: 'auto',
-    }
 
     return (
-        <div style={{ minHeight: '100vh', background: 'var(--bg-page)' }}>
-            <div style={{ maxWidth: '960px', margin: '0 auto', padding: '20px 16px 48px' }}>
+        <div className="min-h-screen bg-slate-50 font-kanit">
+            <div className="max-w-5xl mx-auto px-4 py-5 pb-12">
 
-                <div className="page-header-row">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-start justify-between gap-4 mb-6">
                     <div>
-                        <h1 style={{
-                            margin: 0, fontSize: 'clamp(1.5rem, 5vw, 2rem)',
-                            fontWeight: 700, color: '#0f172a',
-                            letterSpacing: '-0.02em', lineHeight: 1.2,
-                            fontFamily: 'Kanit, sans-serif',
-                        }}>
+                        <h1 className="m-0 text-[clamp(1.5rem,5vw,2rem)] font-bold text-slate-900 tracking-tight leading-tight">
                             ตารางเวรปฏิบัติงาน
                         </h1>
-                        <p style={{
-                            margin: '6px 0 0', fontSize: '0.9rem',
-                            color: '#64748b', fontFamily: 'Kanit, sans-serif',
-                        }}>
+                        <p className="mt-1.5 text-sm text-slate-500">
                             จัดการและติดตามตารางเวรของพนักงาน
                         </p>
                     </div>
                     <button
-                        style={primaryBtnStyle}
+                        className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-br from-blue-600 to-indigo-500 text-white border-none rounded-xl cursor-pointer text-sm font-semibold shadow-[0_3px_12px_rgba(37,99,235,0.3)] hover:opacity-90 transition-all min-h-[44px] w-full sm:w-auto"
                         onClick={() => {
                             setFormData({ ...formData, date: new Date().toISOString().split('T')[0] })
                             setRegisterDialogOpen(true)
@@ -222,35 +125,24 @@ export default function Home() {
                     </button>
                 </div>
 
-                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '20px' }}>
+                <div className="flex gap-3 flex-wrap mb-5">
                     {[
-                        { label: 'เวรทั้งหมด', value: shifts.length, color: '#2563eb', bg: '#dbeafe' },
-                        { label: 'พนักงาน', value: employees.length, color: '#10b981', bg: '#d1fae5' },
-                        { label: 'วันนี้', value: shifts.filter(s => s.date === new Date().toISOString().split('T')[0]).length, color: '#f59e0b', bg: '#fef3c7' },
+                        { label: 'เวรทั้งหมด', value: shifts.length, color: 'text-blue-600', bg: 'bg-blue-100' },
+                        { label: 'พนักงาน', value: employees.length, color: 'text-emerald-500', bg: 'bg-emerald-100' },
+                        { label: 'วันนี้', value: shifts.filter(s => s.date === new Date().toISOString().split('T')[0]).length, color: 'text-amber-500', bg: 'bg-amber-100' },
                     ].map(stat => (
-                        <div key={stat.label} style={{
-                            display: 'flex', alignItems: 'center', gap: '10px',
-                            background: 'white', borderRadius: '14px',
-                            padding: '10px 16px', flex: '1 1 100px',
-                            border: '1px solid #e8edf5',
-                            boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-                        }}>
-                            <div style={{
-                                width: '38px', height: '38px', borderRadius: '10px',
-                                background: stat.bg, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                fontSize: '1.1rem', fontWeight: 700, color: stat.color,
-                                fontFamily: 'Kanit, sans-serif', flexShrink: 0,
-                            }}>
+                        <div key={stat.label} className="flex items-center gap-2.5 bg-white rounded-xl px-4 py-2.5 flex-[1_1_100px] border border-slate-100 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+                            <div className={`w-9 h-9 rounded-lg flex items-center justify-center text-lg font-bold shrink-0 ${stat.bg} ${stat.color}`}>
                                 {stat.value}
                             </div>
-                            <span style={{ fontSize: '0.82rem', color: '#64748b', fontFamily: 'Kanit, sans-serif' }}>
+                            <span className="text-sm text-slate-500">
                                 {stat.label}
                             </span>
                         </div>
                     ))}
                 </div>
 
-                <div style={cardStyle({ marginBottom: '16px' })}>
+                <div className="bg-white rounded-[20px] p-5 shadow-[0_4px_24px_rgba(37,99,235,0.07)] border border-slate-100 mb-4">
                     <FullCalendar
                         plugins={[dayGridPlugin, interactionPlugin]}
                         initialView="dayGridMonth"
@@ -274,26 +166,13 @@ export default function Home() {
                     />
                 </div>
 
-                <div style={cardStyle()}>
-                    <p style={{
-                        margin: '0 0 12px', fontSize: '0.85rem', fontWeight: 600,
-                        color: '#64748b', letterSpacing: '0.04em', textTransform: 'uppercase',
-                        fontFamily: 'Kanit, sans-serif',
-                    }}>ช่วงเวร</p>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                <div className="bg-white rounded-[20px] p-5 shadow-[0_4px_24px_rgba(37,99,235,0.07)] border border-slate-100">
+                    <p className="m-0 mb-3 text-sm font-semibold text-slate-500 tracking-wider uppercase">ช่วงเวร</p>
+                    <div className="flex flex-wrap gap-2">
                         {Object.entries(SHIFT_COLORS).map(([key, s]) => (
-                            <div key={key} style={{
-                                display: 'flex', alignItems: 'center', gap: '8px',
-                                background: s.bg + '18',
-                                border: `1.5px solid ${s.bg}33`,
-                                borderRadius: '10px',
-                                padding: '6px 12px',
-                            }}>
-                                <div style={{
-                                    width: '10px', height: '10px',
-                                    borderRadius: '50%', background: s.bg, flexShrink: 0,
-                                }} />
-                                <span style={{ fontSize: '0.8rem', color: '#475569', fontFamily: 'Kanit, sans-serif' }}>
+                            <div key={key} className={`flex items-center gap-2 rounded-xl px-3 py-1.5 bg-opacity-10 border border-opacity-20 ${s.bgClass.replace('bg-', 'bg-').replace('500', '500/10')} ${s.textClass.replace('text-', 'border-').replace('500', '500/20')}`}>
+                                <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${s.bgClass}`} />
+                                <span className="text-xs text-slate-600">
                                     {s.label}
                                 </span>
                             </div>
@@ -304,110 +183,65 @@ export default function Home() {
 
             <Dialog.Root open={dayDetailsOpen} onOpenChange={setDayDetailsOpen}>
                 <Dialog.Portal>
-                    <Dialog.Overlay style={dialogOverlayStyle} />
-                    <Dialog.Content className="radix-themes" style={dialogContentStyle}>
+                    <Dialog.Overlay className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[9998] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+                    <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-[22px] p-6 sm:p-7 w-[calc(100%-32px)] max-w-[440px] z-[9999] shadow-2xl max-h-[90vh] overflow-y-auto data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] duration-200">
                         <Dialog.Title asChild>
-                            <div style={{ marginBottom: '20px' }}>
-                                <p style={{
-                                    margin: '0 0 2px', fontSize: '0.75rem', fontWeight: 600,
-                                    color: '#94a3b8', letterSpacing: '0.05em', textTransform: 'uppercase',
-                                    fontFamily: 'Kanit, sans-serif',
-                                }}>รายละเอียดวันที่</p>
-                                <h2 style={{
-                                    margin: 0, fontSize: '1.4rem', fontWeight: 700, color: '#0f172a',
-                                    fontFamily: 'Kanit, sans-serif',
-                                }}>{selectedDate}</h2>
+                            <div className="mb-5">
+                                <p className="m-0 mb-0.5 text-xs font-semibold text-slate-400 tracking-wider uppercase">รายละเอียดวันที่</p>
+                                <h2 className="m-0 text-xl font-bold text-slate-900">{selectedDate}</h2>
                             </div>
                         </Dialog.Title>
 
                         {shiftsOnSelectedDate.length === 0 ? (
-                            <div style={{
-                                display: 'flex', flexDirection: 'column', alignItems: 'center',
-                                padding: '36px 0', gap: '12px',
-                            }}>
-                                <div style={{
-                                    width: '64px', height: '64px', borderRadius: '16px',
-                                    background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                }}>
+                            <div className="flex flex-col items-center py-9 gap-3">
+                                <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center">
                                     <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#94a3b8">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>
                                 </div>
-                                <p style={{ margin: 0, color: '#94a3b8', fontSize: '0.9rem', fontFamily: 'Kanit, sans-serif' }}>
+                                <p className="m-0 text-slate-400 text-sm">
                                     ไม่มีเวรในวันนี้
                                 </p>
                             </div>
                         ) : (
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
-                                {shiftsOnSelectedDate.map(shift => (
-                                    <div key={shift.id} style={{
-                                        display: 'flex', alignItems: 'center', gap: '14px',
-                                        background: '#f8fafc', borderRadius: '14px', padding: '14px',
-                                        border: '1px solid #e2e8f0',
-                                    }}>
-                                        <div style={{
-                                            width: '40px', height: '40px', borderRadius: '12px', flexShrink: 0,
-                                            background: getShiftColor(shift.shiftTime),
-                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        }}>
-                                            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="white">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
+                            <div className="flex flex-col gap-2.5 mb-5">
+                                {shiftsOnSelectedDate.map(shift => {
+                                    const shiftStyle = getShiftStyle(shift.shiftTime)
+                                    return (
+                                        <div key={shift.id} className="flex items-center gap-3.5 bg-slate-50 rounded-xl p-3.5 border border-slate-200">
+                                            <div className={`w-10 h-10 rounded-xl shrink-0 flex items-center justify-center ${shiftStyle.bgClass}`}>
+                                                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="white">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="m-0 text-sm font-semibold text-slate-900 whitespace-nowrap overflow-hidden text-ellipsis">
+                                                    {shift.employeeName}
+                                                </p>
+                                                <p className="m-0 mt-0.5 text-xs text-slate-500">
+                                                    {SHIFT_COLORS[shift.shiftTime]?.label ?? shift.shiftTime}
+                                                    {SHIFT_COLORS[shift.shiftTime] ? ` · ${SHIFT_COLORS[shift.shiftTime].text}` : ''}
+                                                </p>
+                                            </div>
+                                            <div className={`px-2.5 py-1 rounded-full text-[0.7rem] font-semibold whitespace-nowrap bg-opacity-10 border border-opacity-20 ${shiftStyle.bgClass.replace('bg-', 'bg-').replace('500', '500/10')} ${shiftStyle.textClass} ${shiftStyle.textClass.replace('text-', 'border-').replace('500', '500/20')}`}>
+                                                {shift.status === 'confirmed' ? 'ยืนยัน' : shift.status}
+                                            </div>
                                         </div>
-                                        <div style={{ flex: 1, minWidth: 0 }}>
-                                            <p style={{
-                                                margin: 0, fontSize: '0.95rem', fontWeight: 600, color: '#0f172a',
-                                                fontFamily: 'Kanit, sans-serif',
-                                                whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                                            }}>{shift.employeeName}</p>
-                                            <p style={{
-                                                margin: '2px 0 0', fontSize: '0.8rem', color: '#64748b',
-                                                fontFamily: 'Kanit, sans-serif',
-                                            }}>
-                                                {SHIFT_COLORS[shift.shiftTime]?.label ?? shift.shiftTime}
-                                                {SHIFT_COLORS[shift.shiftTime] ? ` · ${SHIFT_COLORS[shift.shiftTime].text}` : ''}
-                                            </p>
-                                        </div>
-                                        <div style={{
-                                            padding: '3px 10px', borderRadius: '20px',
-                                            background: getShiftColor(shift.shiftTime) + '22',
-                                            color: getShiftColor(shift.shiftTime),
-                                            fontSize: '0.72rem', fontWeight: 600,
-                                            fontFamily: 'Kanit, sans-serif',
-                                            border: `1px solid ${getShiftColor(shift.shiftTime)}44`,
-                                            whiteSpace: 'nowrap',
-                                        }}>
-                                            {shift.status === 'confirmed' ? 'ยืนยัน' : shift.status}
-                                        </div>
-                                    </div>
-                                ))}
+                                    )
+                                })}
                             </div>
                         )}
 
-                        <div style={{
-                            display: 'flex', justifyContent: 'flex-end', gap: '8px',
-                            paddingTop: '14px', borderTop: '1px solid #f1f5f9',
-                        }}>
+                        <div className="flex justify-end gap-2 pt-3.5 border-t border-slate-100">
                             <Dialog.Close asChild>
-                                <button style={{
-                                    padding: '6px 16px', borderRadius: '9px', border: 'none',
-                                    background: '#f1f5f9', color: '#64748b', cursor: 'pointer',
-                                    fontSize: '0.82rem', fontWeight: 500, fontFamily: 'Kanit, sans-serif',
-                                    transition: 'background 0.15s',
-                                }}>ปิด</button>
+                                <button className="px-4 py-1.5 rounded-lg bg-slate-100 text-slate-500 hover:bg-slate-200 text-sm font-medium transition-colors">
+                                    ปิด
+                                </button>
                             </Dialog.Close>
                             <button
-                                style={{
-                                    display: 'inline-flex', alignItems: 'center', gap: '6px',
-                                    padding: '6px 14px', borderRadius: '9px', border: 'none',
-                                    background: 'linear-gradient(135deg, #2563eb, #6366f1)',
-                                    color: 'white', cursor: 'pointer',
-                                    fontSize: '0.82rem', fontWeight: 600, fontFamily: 'Kanit, sans-serif',
-                                    boxShadow: '0 2px 8px rgba(37,99,235,0.25)',
-                                    transition: 'all 0.15s',
-                                }}
+                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-500 text-white text-sm font-semibold shadow-md hover:opacity-90 transition-all"
                                 onClick={() => {
                                     setFormData({ ...formData, date: selectedDate || '' })
                                     setDayDetailsOpen(false)
@@ -426,32 +260,25 @@ export default function Home() {
 
             <Dialog.Root open={registerDialogOpen} onOpenChange={setRegisterDialogOpen}>
                 <Dialog.Portal>
-                    <Dialog.Overlay style={dialogOverlayStyle} />
-                    <Dialog.Content className="radix-themes" style={dialogContentStyle}>
+                    <Dialog.Overlay className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[9998] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+                    <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-[22px] p-6 sm:p-7 w-[calc(100%-32px)] max-w-[440px] z-[9999] shadow-2xl overflow-y-auto data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] duration-200">
                         <Dialog.Title asChild>
-                            <div style={{ marginBottom: '22px' }}>
-                                <p style={{
-                                    margin: '0 0 2px', fontSize: '0.75rem', fontWeight: 600,
-                                    color: '#94a3b8', letterSpacing: '0.05em', textTransform: 'uppercase',
-                                    fontFamily: 'Kanit, sans-serif',
-                                }}>เพิ่มข้อมูล</p>
-                                <h2 style={{
-                                    margin: 0, fontSize: '1.4rem', fontWeight: 700, color: '#0f172a',
-                                    fontFamily: 'Kanit, sans-serif',
-                                }}>ลงทะเบียนเวร</h2>
+                            <div className="mb-5">
+                                <p className="m-0 mb-0.5 text-xs font-semibold text-slate-400 tracking-wider uppercase">เพิ่มข้อมูล</p>
+                                <h2 className="m-0 text-xl font-bold text-slate-900">ลงทะเบียนเวร</h2>
                             </div>
                         </Dialog.Title>
 
                         <form onSubmit={handleRegisterShift}>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+                            <div className="flex flex-col gap-4">
 
                                 <div>
-                                    <label style={labelStyle}>พนักงาน</label>
+                                    <label className="block text-xs font-semibold text-slate-500 mb-1.5 tracking-wider uppercase">พนักงาน</label>
                                     <select
                                         value={formData.employeeId}
                                         onChange={e => setFormData({ ...formData, employeeId: e.target.value })}
                                         required
-                                        style={inputStyle}
+                                        className="w-full px-3.5 py-2.5 rounded-xl border-[1.5px] border-slate-200 text-sm text-slate-900 bg-slate-50 outline-none focus:bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-colors"
                                     >
                                         <option value="">เลือกพนักงาน...</option>
                                         {employees.map(emp => (
@@ -463,8 +290,8 @@ export default function Home() {
                                 </div>
 
                                 <div>
-                                    <label style={labelStyle}>ช่วงเวร</label>
-                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                                    <label className="block text-xs font-semibold text-slate-500 mb-1.5 tracking-wider uppercase">ช่วงเวร</label>
+                                    <div className="flex flex-wrap gap-2">
                                         {Object.entries(SHIFT_COLORS).map(([key, s]) => {
                                             const active = formData.shiftTime === key
                                             return (
@@ -472,24 +299,9 @@ export default function Home() {
                                                     key={key}
                                                     type="button"
                                                     onClick={() => setFormData({ ...formData, shiftTime: key })}
-                                                    style={{
-                                                        padding: '7px 13px',
-                                                        borderRadius: '10px',
-                                                        border: active ? `2px solid ${s.bg}` : '2px solid #e2e8f0',
-                                                        background: active ? s.bg + '15' : 'white',
-                                                        color: active ? s.bg : '#64748b',
-                                                        cursor: 'pointer',
-                                                        fontSize: '0.8rem',
-                                                        fontWeight: active ? 600 : 400,
-                                                        fontFamily: 'Kanit, sans-serif',
-                                                        transition: 'all 0.15s',
-                                                        display: 'flex', alignItems: 'center', gap: '5px',
-                                                    }}
+                                                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 cursor-pointer text-xs font-kanit transition-all ${active ? `border-transparent ${s.bgClass.replace('bg-', 'bg-').replace('500', '500/15')} ${s.textClass}` : 'border-slate-200 bg-white text-slate-500'} ${active ? 'font-semibold ring-2 ring-offset-1 ' + s.textClass.replace('text-', 'ring-').replace('500', '500/50') : 'font-normal hover:bg-slate-50'}`}
                                                 >
-                                                    <span style={{
-                                                        width: '8px', height: '8px', borderRadius: '50%',
-                                                        background: s.bg, flexShrink: 0,
-                                                    }} />
+                                                    <span className={`w-2 h-2 rounded-full shrink-0 ${s.bgClass}`} />
                                                     {s.label}
                                                 </button>
                                             )
@@ -498,37 +310,29 @@ export default function Home() {
                                 </div>
 
                                 <div>
-                                    <label style={labelStyle}>วันที่</label>
+                                    <label className="block text-xs font-semibold text-slate-500 mb-1.5 tracking-wider uppercase">วันที่</label>
                                     <input
                                         type="date"
                                         value={formData.date}
                                         onChange={e => setFormData({ ...formData, date: e.target.value })}
                                         required
-                                        style={inputStyle}
+                                        className="w-full px-3.5 py-2.5 rounded-xl border-[1.5px] border-slate-200 text-sm text-slate-900 bg-slate-50 outline-none focus:bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-colors"
                                     />
                                 </div>
                             </div>
 
-                            <div style={{
-                                display: 'flex', justifyContent: 'flex-end', gap: '10px',
-                                paddingTop: '20px', marginTop: '20px', borderTop: '1px solid #f1f5f9',
-                            }}>
+                            <div className="flex justify-end gap-2.5 pt-5 mt-5 border-t border-slate-100">
                                 <Dialog.Close asChild>
-                                    <button type="button" style={ghostBtnStyle}>ยกเลิก</button>
+                                    <button type="button" className="inline-flex items-center justify-center px-5 py-2.5 bg-slate-100 text-slate-500 rounded-xl text-sm font-medium hover:bg-slate-200 transition-colors min-h-[44px]">ยกเลิก</button>
                                 </Dialog.Close>
                                 <button
                                     type="submit"
-                                    style={{ ...primaryBtnStyle, opacity: saving ? 0.7 : 1 }}
                                     disabled={saving}
+                                    className={`inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold shadow-[0_3px_12px_rgba(37,99,235,0.3)] transition-all min-h-[44px] ${saving ? 'opacity-70 cursor-not-allowed bg-blue-300' : 'bg-gradient-to-br from-blue-600 to-indigo-500 text-white hover:opacity-90 cursor-pointer'}`}
                                 >
                                     {saving ? (
                                         <>
-                                            <span style={{
-                                                width: '14px', height: '14px', borderRadius: '50%',
-                                                border: '2px solid rgba(255,255,255,0.5)',
-                                                borderTopColor: 'white', animation: 'spin 0.6s linear infinite',
-                                                display: 'inline-block',
-                                            }} />
+                                            <span className="w-3.5 h-3.5 rounded-full border-2 border-white/50 border-t-white animate-spin inline-block" />
                                             กำลังบันทึก...
                                         </>
                                     ) : 'บันทึกเวร'}
@@ -538,30 +342,6 @@ export default function Home() {
                     </Dialog.Content>
                 </Dialog.Portal>
             </Dialog.Root>
-
-            <style>{`
-                @keyframes spin { to { transform: rotate(360deg); } }
-                input[type="date"]:focus, select:focus { border-color: #2563eb !important; outline: none; }
-
-                .page-header-row {
-                    display: flex;
-                    align-items: flex-start;
-                    justify-content: space-between;
-                    gap: 16px;
-                    margin-bottom: 24px;
-                }
-
-                @media (max-width: 480px) {
-                    .page-header-row {
-                        flex-direction: column;
-                        align-items: stretch;
-                    }
-                    .page-header-row button {
-                        width: 100%;
-                        justify-content: center;
-                    }
-                }
-            `}</style>
         </div>
     )
 }
