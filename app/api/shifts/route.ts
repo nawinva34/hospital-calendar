@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 
 export async function GET(request: Request) {
     try {
@@ -7,7 +8,7 @@ export async function GET(request: Request) {
         const employeeId = searchParams.get('employeeId')
         const date = searchParams.get('date')
 
-        const where: any = {}
+        const where: Prisma.ShiftWhereInput = {}
         if (employeeId) where.employeeId = parseInt(employeeId)
         if (date) where.date = date
 
