@@ -9,6 +9,7 @@ interface Employee {
     position: string
     department: string
     email: string
+    image?: string | null
 }
 
 const DEPT_COLORS: Record<string, string> = {
@@ -39,7 +40,7 @@ export default function EmployeesPage() {
     const [deleting, setDeleting] = useState(false)
     const [deleteTarget, setDeleteTarget] = useState<Employee | null>(null)
     const [search, setSearch] = useState('')
-    const [formData, setFormData] = useState({ name: '', position: '', department: '', email: '' })
+    const [formData, setFormData] = useState({ name: '', position: '', department: '', email: '', image: '' })
 
     useEffect(() => { fetchEmployees() }, [])
 
@@ -61,7 +62,7 @@ export default function EmployeesPage() {
         if (res.ok) {
             fetchEmployees()
             setDialogOpen(false)
-            setFormData({ name: '', position: '', department: '', email: '' })
+            setFormData({ name: '', position: '', department: '', email: '', image: '' })
         }
     }
 
@@ -170,8 +171,12 @@ export default function EmployeesPage() {
                             const gradClass = AVATAR_GRADIENTS[idx % AVATAR_GRADIENTS.length]
                             return (
                                 <div key={emp.id} className="grid grid-cols-[44px_1fr_auto] grid-rows-[auto_auto] sm:grid-cols-[40px_1fr_130px_1fr_80px] sm:grid-rows-1 gap-x-3 gap-y-1 sm:gap-3 p-3.5 sm:p-4 items-center border-b border-slate-50 last:border-none hover:bg-slate-50 transition-colors">
-                                    <div className={`col-start-1 row-span-2 sm:row-span-1 w-11 h-11 sm:w-9 sm:h-9 rounded-xl flex shrink-0 items-center justify-center text-white font-bold text-base sm:text-sm bg-gradient-to-br ${gradClass}`}>
-                                        {emp.name.charAt(0).toUpperCase()}
+                                    <div className={`col-start-1 row-span-2 sm:row-span-1 w-11 h-11 sm:w-9 sm:h-9 rounded-xl flex shrink-0 items-center justify-center text-white font-bold text-base sm:text-sm bg-gradient-to-br overflow-hidden ${gradClass}`}>
+                                        {emp.image ? (
+                                            <img src={emp.image} alt={emp.name} className="w-full h-full object-cover" />
+                                        ) : (
+                                            emp.name.charAt(0).toUpperCase()
+                                        )}
                                     </div>
 
                                     <div className="col-start-2 row-start-1 sm:col-auto sm:row-auto min-w-0">
@@ -249,6 +254,32 @@ export default function EmployeesPage() {
                                         />
                                     </div>
                                 ))}
+
+                                <div>
+                                    <label className="block text-xs font-semibold text-slate-500 mb-1.5 tracking-wider uppercase">
+                                        รูปโปรไฟล์
+                                    </label>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={e => {
+                                            const file = e.target.files?.[0]
+                                            if (file) {
+                                                const reader = new FileReader()
+                                                reader.onloadend = () => {
+                                                    setFormData({ ...formData, image: reader.result as string })
+                                                }
+                                                reader.readAsDataURL(file)
+                                            }
+                                        }}
+                                        className="w-full px-3.5 py-2.5 rounded-xl border-[1.5px] border-slate-200 text-sm text-slate-900 bg-slate-50 outline-none focus:bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-colors file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                                    />
+                                    {formData.image && (
+                                        <div className="mt-3">
+                                            <img src={formData.image} alt="Preview" className="w-16 h-16 object-cover rounded-xl" />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
 
                             <div className="flex justify-end gap-2 pt-4 mt-4 border-t border-slate-100">
