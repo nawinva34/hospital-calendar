@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
 
 export default function Navbar() {
     const pathname = usePathname()
@@ -137,6 +138,10 @@ export default function Navbar() {
                         boxShadow: '-8px 0 32px rgba(0,0,0,0.4)',
                         animation: 'slideInRight 0.25s ease',
                     }}>
+                        <VisuallyHidden.Root>
+                            <Dialog.Title>เมนูนำทาง</Dialog.Title>
+                            <Dialog.Description>เมนูด้านข้างสำหรับใช้งานบนมือถือ</Dialog.Description>
+                        </VisuallyHidden.Root>
                         <div style={{
                             padding: '20px',
                             borderBottom: '1px solid rgba(255,255,255,0.08)',

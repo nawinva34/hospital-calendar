@@ -52,7 +52,8 @@ export async function POST(request: Request) {
                 name: body.name,
                 position: body.position,
                 department: body.department,
-                email: body.email
+                email: body.email,
+                image: body.image || null
             }
         })
 
