@@ -1,14 +1,42 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
 
 export default function Navbar() {
     const pathname = usePathname()
+    const router = useRouter()
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const [user, setUser] = useState<{name: string, email: string} | null>(null)
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const res = await fetch('/api/auth/me')
+                const data = await res.json()
+                if (data.success && data.data) {
+                    setUser(data.data)
+                }
+            } catch (error) {
+                console.error("Failed to fetch user", error)
+            }
+        }
+        fetchUser()
+    }, [pathname])
+
+    const handleLogout = async () => {
+        try {
+            await fetch('/api/auth/logout', { method: 'POST' })
+            setUser(null)
+            router.push('/login')
+            router.refresh()
+        } catch (error) {
+            console.error("Logout failed", error)
+        }
+    }
 
     const navLinks = [
         {
@@ -74,7 +102,7 @@ export default function Navbar() {
                     </Link>
 
                     <div className="hidden md:flex" style={{ alignItems: 'center', gap: '4px' }}>
-                        {navLinks.map(link => {
+                        {user && navLinks.map(link => {
                             const active = pathname === link.href
                             return (
                                 <Link key={link.href} href={link.href} style={{ textDecoration: 'none' }}>
@@ -96,6 +124,40 @@ export default function Navbar() {
                                 </Link>
                             )
                         })}
+                        {user ? (
+                            <div className="ml-2 flex items-center gap-3 pl-3 border-l border-white/10">
+                                <div className="flex flex-col items-end">
+                                    <span className="text-white text-sm font-semibold leading-tight">{user.name}</span>
+                                    <span className="text-white/50 text-[0.65rem] leading-tight">{user.email}</span>
+                                </div>
+                                <button
+                                    onClick={handleLogout}
+                                    className="p-1.5 text-white/50 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
+                                    title="ออกจากระบบ"
+                                >
+                                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                    </svg>
+                                </button>
+                            </div>
+                        ) : (
+                            <Link href="/login" style={{ textDecoration: 'none' }}>
+                                <div style={{
+                                    display: 'flex', alignItems: 'center', gap: '6px',
+                                    padding: '7px 16px',
+                                    borderRadius: '10px',
+                                    fontSize: '0.9rem',
+                                    fontWeight: 600,
+                                    color: 'white',
+                                    background: 'rgba(255,255,255,0.1)',
+                                    transition: 'all 0.2s',
+                                    fontFamily: 'Kanit, sans-serif',
+                                    cursor: 'pointer',
+                                }}>
+                                    เข้าสู่ระบบ
+                                </div>
+                            </Link>
+                        )}
                     </div>
 
                     <button
@@ -179,35 +241,37 @@ export default function Navbar() {
                             </Dialog.Close>
                         </div>
 
-                        <div style={{ padding: '16px 20px' }}>
-                            <div style={{
-                                display: 'flex', alignItems: 'center', gap: '12px',
-                                background: 'rgba(255,255,255,0.06)',
-                                border: '1px solid rgba(255,255,255,0.1)',
-                                borderRadius: '14px',
-                                padding: '12px 14px',
-                            }}>
+                        {user ? (
+                            <div style={{ padding: '16px 20px' }}>
                                 <div style={{
-                                    width: '42px', height: '42px',
-                                    background: 'linear-gradient(135deg, #2563eb, #6366f1)',
-                                    borderRadius: '50%',
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    color: 'white', fontWeight: 700, fontSize: '0.9rem',
-                                    fontFamily: 'Kanit, sans-serif',
-                                    flexShrink: 0,
+                                    display: 'flex', alignItems: 'center', gap: '12px',
+                                    background: 'rgba(255,255,255,0.06)',
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    borderRadius: '14px',
+                                    padding: '12px 14px',
                                 }}>
-                                    AD
-                                </div>
-                                <div>
-                                    <div style={{ color: 'white', fontWeight: 600, fontSize: '0.9rem', fontFamily: 'Kanit, sans-serif' }}>
-                                        ผู้ดูแลระบบ
+                                    <div style={{
+                                        width: '42px', height: '42px',
+                                        background: 'linear-gradient(135deg, #2563eb, #6366f1)',
+                                        borderRadius: '50%',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        color: 'white', fontWeight: 700, fontSize: '0.9rem',
+                                        fontFamily: 'Kanit, sans-serif',
+                                        flexShrink: 0,
+                                    }}>
+                                        {user.name.charAt(0).toUpperCase()}
                                     </div>
-                                    <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.75rem', fontFamily: 'Kanit, sans-serif' }}>
-                                        admin@hospital.com
+                                    <div style={{ minWidth: 0, flex: 1 }}>
+                                        <div style={{ color: 'white', fontWeight: 600, fontSize: '0.9rem', fontFamily: 'Kanit, sans-serif', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                            {user.name}
+                                        </div>
+                                        <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.75rem', fontFamily: 'Kanit, sans-serif', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                            {user.email}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        ) : null}
 
                         <div style={{ flex: 1, padding: '8px 12px', overflowY: 'auto' }}>
                             <p style={{
@@ -215,7 +279,7 @@ export default function Navbar() {
                                 letterSpacing: '0.08em', textTransform: 'uppercase',
                                 padding: '0 8px', marginBottom: '8px', fontFamily: 'Kanit, sans-serif',
                             }}>นำทาง</p>
-                            {navLinks.map(link => {
+                            {user ? navLinks.map(link => {
                                 const active = pathname === link.href
                                 return (
                                     <Link key={link.href} href={link.href}
@@ -241,29 +305,59 @@ export default function Navbar() {
                                         </div>
                                     </Link>
                                 )
-                            })}
+                            }) : (
+                                <Link href="/login"
+                                      onClick={() => setMobileMenuOpen(false)}
+                                      style={{ textDecoration: 'none', display: 'block', marginBottom: '4px' }}>
+                                    <div style={{
+                                        display: 'flex', alignItems: 'center', gap: '12px',
+                                        padding: '12px 14px',
+                                        borderRadius: '12px',
+                                        color: 'white',
+                                        background: 'rgba(255,255,255,0.1)',
+                                        border: '1px solid transparent',
+                                        fontWeight: 600,
+                                        fontSize: '0.95rem',
+                                        fontFamily: 'Kanit, sans-serif',
+                                        transition: 'all 0.2s',
+                                        cursor: 'pointer',
+                                    }}>
+                                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                                        </svg>
+                                        เข้าสู่ระบบ
+                                    </div>
+                                </Link>
+                            )}
                         </div>
 
-                        <div style={{ padding: '16px 12px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-                            <button style={{
-                                display: 'flex', alignItems: 'center', gap: '12px',
-                                width: '100%', padding: '12px 14px',
-                                background: 'rgba(239,68,68,0.1)',
-                                border: '1px solid rgba(239,68,68,0.2)',
-                                borderRadius: '12px',
-                                color: 'rgba(252,165,165,0.9)',
-                                fontSize: '0.95rem', fontWeight: 400,
-                                fontFamily: 'Kanit, sans-serif',
-                                cursor: 'pointer',
-                                transition: 'background 0.2s',
-                            }}>
-                                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                </svg>
-                                ออกจากระบบ
-                            </button>
-                        </div>
+                        {user ? (
+                            <div style={{ padding: '16px 12px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+                                <button
+                                    onClick={() => {
+                                        setMobileMenuOpen(false)
+                                        handleLogout()
+                                    }}
+                                    style={{
+                                        display: 'flex', alignItems: 'center', gap: '12px',
+                                        width: '100%', padding: '12px 14px',
+                                        background: 'rgba(239,68,68,0.1)',
+                                        border: '1px solid rgba(239,68,68,0.2)',
+                                        borderRadius: '12px',
+                                        color: 'rgba(252,165,165,0.9)',
+                                        fontSize: '0.95rem', fontWeight: 400,
+                                        fontFamily: 'Kanit, sans-serif',
+                                        cursor: 'pointer',
+                                        transition: 'background 0.2s',
+                                    }}>
+                                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                    </svg>
+                                    ออกจากระบบ
+                                </button>
+                            </div>
+                        ) : null}
                     </Dialog.Content>
                 </Dialog.Portal>
             </Dialog.Root>
